@@ -45,12 +45,13 @@ jobs:
       # https://pytest.org
       # https://nose.readthedocs.io
       # Uncomment below:
-#      - run:
-#          name: run tests
-#          command: |
-#            . venv/bin/activate
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            python pytest
 #            python manage.py test
-#
-#      - store_artifacts:
-#          path: test-reports
-#          destination: test-reports
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
