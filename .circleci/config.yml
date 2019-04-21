@@ -34,9 +34,9 @@ jobs:
           command: |
 #            python3 -m venv venv
 #            . venv/bin/activate
-            sudo pip install pipenv
-            pipenv install
-            pip install -r requirements.txt
+             sudo pip install pipenv
+             pipenv install
+             pip install -r requirements.txt
 
       - save_cache:
           paths:
