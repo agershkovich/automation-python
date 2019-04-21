@@ -54,7 +54,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            main.py
+            pipenv run python main.py
 
       - run:
           name: run tests
