@@ -49,12 +49,12 @@ jobs:
       # https://pytest.org
       # https://nose.readthedocs.io
       # Uncomment below:
-#      - run:
-#          name: run main
-#          command: |
-#            python3 -m venv venv
-#            . venv/bin/activate
-#            python3 main.py
+      - run:
+          name: run main
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            python3 main.py
 
       - run:
           name: run tests
