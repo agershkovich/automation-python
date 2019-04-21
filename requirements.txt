@@ -1,2 +1,5 @@
+lxml
+xmltodict
+xmldiff
 pytest
 pytest-html
