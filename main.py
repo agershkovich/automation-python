@@ -1,5 +1,3 @@
-import os
-
 from src.xml_lib import *
 
 
