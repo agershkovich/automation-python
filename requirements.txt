@@ -3,3 +3,4 @@ xmltodict
 xmldiff
 pytest
 pytest-html
+pipenv
