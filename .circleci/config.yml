@@ -48,6 +48,12 @@ jobs:
       # https://nose.readthedocs.io
       # Uncomment below:
       - run:
+          name: run main
+          command: |
+            . venv/bin/activate
+            main.py
+
+      - run:
           name: run tests
           command: |
             . venv/bin/activate
