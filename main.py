@@ -36,5 +36,6 @@ def main():
     json_to_xml(os.path.isfile(os.path.abspath('samples/output/output_test_data.json')),
                 os.path.isfile(os.path.abspath('samples/output/output_json_to_xml_test_data.xml')))
 
-    if __name__ == "__main__":
-        main()
+
+if __name__ == "__main__":
+    main()
