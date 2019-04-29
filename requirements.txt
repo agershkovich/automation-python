@@ -3,3 +3,5 @@ xmltodict
 xmldiff
 pytest
 pytest-html
+webdriver_manager
+selenium
