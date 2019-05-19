@@ -4,14 +4,15 @@ from jira.pages.basepage import BasePage
 
 login_form_id = 'login-form-username'
 password_form_id = 'login-form-password'
-submit_button_id = 'login-form-submit'
-login_error = "aui-message aui-message-error"
+login_button_id = 'login'
+# login_error = "aui-message aui-message-error"
 create_issue_id = "create_link"
 
 
 class LoginPage(BasePage):
 
     def get_title(self):
+
         return self.driver.title
 
     def open(self, url):
@@ -24,5 +25,5 @@ class LoginPage(BasePage):
     def login_to_jira(self, login, password):
         self.type_to_elem(login_form_id, By.ID, login)
         self.type_to_elem(password_form_id, By.ID, password)
-        self.click_elem(submit_button_id, By.ID)
+        self.click_elem(login_button_id, By.ID)
         return self.presence_of_element(create_issue_id, By.ID)
