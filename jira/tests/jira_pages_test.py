@@ -19,21 +19,15 @@ class TestLoginPage:
 
     def test_correct_username_but_wrong_password(self):
         LoginPage.open_url(self, base_url)
-        LoginPage.input_username(self, username)
-        LoginPage.input_password(self, wrong_credentials)
-        LoginPage.submit_credentials(self)
+        LoginPage.login_to_jira(self, username, wrong_credentials)
         assert LoginPage.is_error_message_present(self)
 
     def test_correct_password_but_wrong_username(self):
         LoginPage.open_url(self, base_url)
-        LoginPage.input_username(self, wrong_credentials)
-        LoginPage.input_password(self, password)
-        LoginPage.submit_credentials(self)
+        LoginPage.login_to_jira(self, wrong_credentials, password)
         assert LoginPage.is_error_message_present(self)
 
     def test_correct_username_correct_password(self):
         LoginPage.open_url(self, base_url)
-        LoginPage.input_username(self, username)
-        LoginPage.input_password(self, password)
-        LoginPage.submit_credentials(self)
+        LoginPage.login_to_jira(self, username, password)
         assert Dashboard.is_dashboard_avatar_icon_present(self)

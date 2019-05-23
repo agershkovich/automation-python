@@ -12,13 +12,18 @@ class LoginPage(BasePage):
     error_message = (By.CLASS_NAME, "aui-message-error")
     avatar_icon = (By.CLASS_NAME, "aui-avatar-inner")
 
-    def input_username(self, username):
+    # def input_username(self, username):
+    #     UIInteractions.input_text_value(self.driver, LoginPage.login_form_id, username)
+    #
+    # def input_password(self, password):
+    #     UIInteractions.input_text_value(self.driver, LoginPage.password_form_id, password)
+    #
+    # def submit_credentials(self):
+    #     UIInteractions.submit(self.driver, LoginPage.login_button_id)
+
+    def login_to_jira(self, username, password):
         UIInteractions.input_text_value(self.driver, LoginPage.login_form_id, username)
-
-    def input_password(self, password):
         UIInteractions.input_text_value(self.driver, LoginPage.password_form_id, password)
-
-    def submit_credentials(self):
         UIInteractions.submit(self.driver, LoginPage.login_button_id)
 
     def is_error_message_present(self):
