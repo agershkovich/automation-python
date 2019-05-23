@@ -7,12 +7,12 @@ class UIInteractions:
     @staticmethod
     def waiting_for_element_visibility(driver, locator):
         return WebDriverWait(driver, 10).until(
-            ec.visibility_of_element_located((By.ID, locator)))
+            ec.visibility_of_element_located(locator))
 
     @staticmethod
     def waiting_for_element_is_clickable(driver, locator):
         return WebDriverWait(driver, 10).until(
-            ec.element_to_be_clickable((By.ID, locator)))
+            ec.element_to_be_clickable(locator))
 
     @staticmethod
     def click(driver, locator):
