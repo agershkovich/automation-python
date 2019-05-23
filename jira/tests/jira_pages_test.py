@@ -1,3 +1,5 @@
+from time import sleep
+
 import pytest
 
 from jira.pages.dashboardpage import Dashboard
@@ -31,3 +33,11 @@ class TestLoginPage:
         LoginPage.open_url(self, base_url)
         LoginPage.login_to_jira(self, username, password)
         assert Dashboard.is_dashboard_avatar_icon_present(self)
+
+
+@pytest.mark.usefixtures("driver_init")
+class TestDashboardPage:
+    def test_create_issue_with_all_required_fields(self):
+        LoginPage.open_url(self, base_url)
+        LoginPage.login_to_jira(self, username, password)
+        Dashboard.start_create_issue(self)

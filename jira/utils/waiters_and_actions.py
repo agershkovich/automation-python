@@ -4,14 +4,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 
 class UIInteractions:
+    timeout = 15
     @staticmethod
     def waiting_for_element_visibility(driver, locator):
-        return WebDriverWait(driver, 10).until(
+        return WebDriverWait(driver, UIInteractions.timeout).until(
             ec.visibility_of_element_located(locator))
 
     @staticmethod
     def waiting_for_element_is_clickable(driver, locator):
-        return WebDriverWait(driver, 10).until(
+        return WebDriverWait(driver, UIInteractions.timeout).until(
             ec.element_to_be_clickable(locator))
 
     @staticmethod

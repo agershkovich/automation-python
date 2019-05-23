@@ -7,6 +7,7 @@ from jira.utils.waiters_and_actions import UIInteractions
 
 class Dashboard(BasePage):
     avatar_icon = (By.CLASS_NAME, "aui-avatar-inner")
+    create_button_id = (By.ID, "create_link")
 
     def is_dashboard_avatar_icon_present(self):
         try:
@@ -14,3 +15,7 @@ class Dashboard(BasePage):
         except NoSuchElementException:
             return False
         return True
+
+    def start_create_issue(self):
+        UIInteractions.waiting_for_element_visibility(self.driver, Dashboard.create_button_id)
+        UIInteractions.click(self.driver, Dashboard.create_button_id)
