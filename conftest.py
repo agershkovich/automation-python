@@ -12,7 +12,7 @@ def driver_init(request):
     if request.param == "firefox":
         web_driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
     web_driver.maximize_window()
-    web_driver.implicitly_wait(5)
+    web_driver.implicitly_wait(10)
     request.cls.driver = web_driver
     yield
     web_driver.close()

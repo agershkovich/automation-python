@@ -13,10 +13,18 @@ wrong_creds = "Dummy"
 
 @pytest.mark.usefixtures("driver_init")
 class TestLoginPage:
+
+
     def test_open_jira_url(self):
-        self.driver.get(base_url)
+        LoginPage.open_url(self, base_url)
         assert self.driver.title == title
 
-    def test_correct_username_but_wrong_password(self):
-        pass
+        sleep(3)
 
+    def test_correct_username_but_wrong_password(self):
+        LoginPage.open_url(self, base_url)
+        LoginPage.input_username(self, username)
+        LoginPage.input_password(self, password)
+        LoginPage.submit_credentials(self)
+
+        sleep(3)
