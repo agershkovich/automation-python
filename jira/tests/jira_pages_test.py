@@ -57,7 +57,7 @@ class TestDashboardPage:
         CreateIssue.create_issue(self, project, issue, "")
         CreateIssue.submit_issue(self)
         assert CreateIssue.is_error_message_present(self)
-        CreateIssue.cancel_issue(self)
+        CreateIssue.cancel_creating_issue(self)
 
     def test_create_issue_with_parameter_text_lenght_longer_than_supported(self):
         Dashboard.start_create_issue(self)

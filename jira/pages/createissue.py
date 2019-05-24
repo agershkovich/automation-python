@@ -63,7 +63,7 @@ class CreateIssue(BasePage):
 
         sleep(3)
 
-    def cancel_issue(self):
+    def cancel_creating_issue(self):
 
         UIInteractions.click(self.driver, CreateIssue.cancel_button)
 
