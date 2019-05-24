@@ -1,10 +1,11 @@
-from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
 
 class UIInteractions:
-    timeout = 15
+    timeout = 10
+
     @staticmethod
     def waiting_for_element_visibility(driver, locator):
         return WebDriverWait(driver, UIInteractions.timeout).until(
@@ -17,16 +18,19 @@ class UIInteractions:
 
     @staticmethod
     def click(driver, locator):
-        elem = UIInteractions.waiting_for_element_is_clickable(driver, locator)
-        elem.click()
+        UIInteractions.waiting_for_element_is_clickable(driver, locator).click()
 
     @staticmethod
     def input_text_value(driver, locator, value):
-        elem = UIInteractions.waiting_for_element_visibility(driver, locator)
-        elem.clear()
-        elem.send_keys(value)
+        UIInteractions.waiting_for_element_visibility(driver, locator).send_keys(value)
+
+    @staticmethod
+    def input_create_issue_value(driver, locator, value):
+        UIInteractions.waiting_for_element_is_clickable(driver, locator).click()
+        UIInteractions.waiting_for_element_visibility(driver, locator).send_keys(Keys.DELETE)
+        UIInteractions.waiting_for_element_visibility(driver, locator).send_keys(value)
+        UIInteractions.waiting_for_element_visibility(driver, locator).send_keys(Keys.ENTER)
 
     @staticmethod
     def submit(driver, locator):
-        elem = UIInteractions.waiting_for_element_visibility(driver, locator)
-        elem.submit()
+        UIInteractions.waiting_for_element_visibility(driver, locator).submit()
