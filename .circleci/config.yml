@@ -60,7 +60,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest -v test/xml_json_test.py --html=report.html
+            pytest -v jira/tests/jira_pages_test.py --html=report.html
 
       - store_artifacts:
           path: test-reports
