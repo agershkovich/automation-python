@@ -37,8 +37,7 @@ class TestLoginPage:
     def test_correct_username_correct_password(self):
         LoginPage.open_url(self, base_url)
         LoginPage.login_to_jira(self, username, password)
-        assert Dashboard.is_dashboard_avatar_icon_present(self) & Dashboard.is_dashboard_create_issue_button_present(
-            self)
+        assert Dashboard.is_dashboard_create_issue_button_present(self)
 
 
 @pytest.mark.usefixtures("driver_init")
