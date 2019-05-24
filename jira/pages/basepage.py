@@ -5,3 +5,6 @@ class BasePage:
 
     def open_url(self, url):
         self.driver.get(url)
+
+    def current_url(self):
+        return self.driver.current_url

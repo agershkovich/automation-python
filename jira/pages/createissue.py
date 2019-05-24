@@ -25,6 +25,9 @@ class CreateIssue(BasePage):
     error_message = (By.CLASS_NAME, "error")
     cancel_button = (By.CSS_SELECTOR, "a.cancel")
 
+    random_summary = UIInteractions.sing_sen_maker()
+    summary = random_summary
+
     def is_create_issue_page_present(self):
         try:
             UIInteractions.waiting_for_element_visibility(self.driver, CreateIssue.jira_dialog_heading)
@@ -50,8 +53,8 @@ class CreateIssue(BasePage):
         UIInteractions.click(self.driver, CreateIssue.assignee_link)
         UIInteractions.input_text_value(self.driver, CreateIssue.summary_input_field, "")
         UIInteractions.input_text_value(self.driver, CreateIssue.summary_input_field, summary)
-        UIInteractions.input_create_issue_value(self.driver, CreateIssue.project_dropdown_field, project)
-        UIInteractions.input_create_issue_value(self.driver, CreateIssue.issuetype_dropdown_field, issue)
+        UIInteractions.input_issue_value(self.driver, CreateIssue.project_dropdown_field, project)
+        UIInteractions.input_issue_value(self.driver, CreateIssue.issuetype_dropdown_field, issue)
 
     def submit_issue(self):
 
