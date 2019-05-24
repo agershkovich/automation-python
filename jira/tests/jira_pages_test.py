@@ -82,3 +82,16 @@ class TestSearchIssue:
         Dashboard.click_search_for_issues_menu_item(self)
         SearchPage.start_search_issue(self, keywords)
         assert keywords in SearchPage.get_summary_searched_issue(self)
+
+
+@pytest.mark.usefixtures("driver_init")
+class TestUpdateIssue:
+    def test_update_previous_created_issue(self):
+        LoginPage.open_url(self, base_url)
+        LoginPage.login_to_jira(self, username, password)
+        Dashboard.click_my_open_issues_menu_item(self)
+        MyOpenIssues.get_summary_created_issue(self)
+        MyOpenIssues.update_current_summary(self)
+        assert "UPDATED" in MyOpenIssues.get_updated_summary(self)
+        MyOpenIssues.update_current_priority(self)
+        assert "High" in MyOpenIssues.get_updated_priority(self)
