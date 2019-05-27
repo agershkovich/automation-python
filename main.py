@@ -1,7 +1,7 @@
 from src.xml_lib import *
 
 
-def main():
+def main_phase2():
     tree = get_tree_of_xml_file(input_xml_file)
     root = tree.getroot()
     child = root[index_of_child]
