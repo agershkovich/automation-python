@@ -1,3 +1,4 @@
+import allure
 import pytest
 
 from jira.pages.createissue import CreateIssue
@@ -23,21 +24,32 @@ keywords = "Not result"
 
 @pytest.mark.usefixtures("driver_init")
 class TestLoginPage:
-
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Login to Jira")
     def test_open_jira_url(self):
         LoginPage.open_url(self, base_url)
         assert self.driver.title == title
 
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Login to Jira using correct username but wrong password")
     def test_correct_username_but_wrong_password(self):
         LoginPage.open_url(self, base_url)
         LoginPage.login_to_jira(self, username, wrong_credentials)
         assert LoginPage.is_error_message_present(self)
 
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Login to Jira using correct password but wrong username")
     def test_correct_password_but_wrong_username(self):
         LoginPage.open_url(self, base_url)
         LoginPage.login_to_jira(self, wrong_credentials, password)
         assert LoginPage.is_error_message_present(self)
 
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Login to Jira using correct username and password")
     def test_correct_username_correct_password(self):
         LoginPage.open_url(self, base_url)
         LoginPage.login_to_jira(self, username, password)
@@ -46,6 +58,9 @@ class TestLoginPage:
 
 @pytest.mark.usefixtures("driver_init")
 class TestCreateIssue:
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Create an issue with all required fields")
     def test_create_issue_with_all_required_fields(self):
         LoginPage.open_url(self, base_url)
         LoginPage.login_to_jira(self, username, password)
@@ -55,6 +70,9 @@ class TestCreateIssue:
         assert Dashboard.is_dashboard_avatar_icon_present(self) & Dashboard.is_dashboard_create_issue_button_present(
             self)
 
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Create an issue with missing required field")
     def test_create_issue_with_missing_required_field(self):
         Dashboard.start_create_issue(self)
         CreateIssue.create_issue(self, project, issue, "")
@@ -62,6 +80,9 @@ class TestCreateIssue:
         assert CreateIssue.is_error_message_present(self)
         CreateIssue.cancel_creating_issue(self)
 
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Create an issue with parameter length longer that supported")
     def test_create_issue_with_parameter_text_length_longer_than_supported(self):
         Dashboard.start_create_issue(self)
         CreateIssue.create_issue(self, project, issue, long_summary)
@@ -71,13 +92,18 @@ class TestCreateIssue:
 
 @pytest.mark.usefixtures("driver_init")
 class TestSearchIssue:
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Search previous created issue")
     def test_search_previous_created_issue(self):
         LoginPage.open_url(self, base_url)
         LoginPage.login_to_jira(self, username, password)
         Dashboard.click_my_open_issues_menu_item(self)
         MyOpenIssues.get_summary_created_issue(self)
         assert MyOpenIssues.get_summary_created_issue(self) == CreateIssue.summary
-
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Search ""No results"" issue")
     def test_search_no_results_issue(self):
         Dashboard.click_search_for_issues_menu_item(self)
         SearchPage.start_search_issue(self, keywords)
@@ -86,6 +112,9 @@ class TestSearchIssue:
 
 @pytest.mark.usefixtures("driver_init")
 class TestUpdateIssue:
+    @pytest.mark.ui
+    @allure.tag('ui')
+    @allure.title("Update previous created issue")
     def test_update_previous_created_issue(self):
         LoginPage.open_url(self, base_url)
         LoginPage.login_to_jira(self, username, password)
