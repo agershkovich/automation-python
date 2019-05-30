@@ -139,8 +139,8 @@ class TestsUsingApi:
         "http_response, expected",
         [
             (ApiInteractions.login(base_url_api, username, password), 200),  # Login OK
-            (ApiInteractions.login(base_url_api, username, wrong_credentials), 401),  # AUTHENTICATED FAILED
-            (ApiInteractions.login(base_url_api, wrong_credentials, password), 401)  # AUTHENTICATED FAILED
+            (ApiInteractions.login(base_url_api, username, wrong_credentials), 401),  # Wrong password, AUTHENTICATED FAILED
+            (ApiInteractions.login(base_url_api, wrong_credentials, password), 401)  # Wrong username, AUTHENTICATED FAILED
         ]
     )
     def test_login_to_jira_by_api(self, http_response, expected):
