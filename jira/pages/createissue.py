@@ -19,6 +19,8 @@ class CreateIssue(BasePage):
     labels_input_field = (By.ID, "labels-textarea")
     linked_issues_dropdown_list = (By.ID, "issuelinks-linktype")
     issue_input_field = (By.ID, "issuelinks-issues-textarea")
+    original_estimate_input_field = (By.ID, "timetracking_originalestimate")
+    remaining_estimate_input_field = (By.ID, "timetracking_remainingestimate")
     assignee_link = (By.ID, "assign-to-me-trigger")
     epic_link_input_field = (By.ID, "customfield_10000-field")
     security_token_missing = (By.ID, "atl_token_retry_button")
@@ -49,10 +51,12 @@ class CreateIssue(BasePage):
             return False
         return True
 
-    def create_issue(self, project, issue, summary):
+    def create_issue(self, project, issue, summary, original_estimate, remaining_estimate):
         UIInteractions.click(self.driver, CreateIssue.assignee_link)
         UIInteractions.input_text_value(self.driver, CreateIssue.summary_input_field, "")
         UIInteractions.input_text_value(self.driver, CreateIssue.summary_input_field, summary)
+        UIInteractions.input_text_value(self.driver, CreateIssue.original_estimate_input_field, original_estimate)
+        UIInteractions.input_text_value(self.driver, CreateIssue.remaining_estimate_input_field, remaining_estimate)
         UIInteractions.input_issue_value(self.driver, CreateIssue.project_dropdown_field, project)
         UIInteractions.input_issue_value(self.driver, CreateIssue.issuetype_dropdown_field, issue)
 

@@ -20,6 +20,8 @@ long_summary = "One morning, when Gregor Samsa woke from troubled dreams, he fou
                "brown belly, slightly domed and divided by arches. "
 
 keywords = "Not result"
+original_estimate = "3w 4d 12h"
+remaining_estimate = "5w 1d 8h"
 
 
 @pytest.mark.usefixtures("driver_init")
@@ -65,7 +67,7 @@ class TestCreateIssue:
         LoginPage.open_url(self, base_url)
         LoginPage.login_to_jira(self, username, password)
         Dashboard.start_create_issue(self)
-        CreateIssue.create_issue(self, project, issue, CreateIssue.summary)
+        CreateIssue.create_issue(self, project, issue, CreateIssue.summary, original_estimate, remaining_estimate)
         CreateIssue.submit_issue(self)
         assert Dashboard.is_dashboard_avatar_icon_present(self) & Dashboard.is_dashboard_create_issue_button_present(
             self)
@@ -75,7 +77,7 @@ class TestCreateIssue:
     @allure.title("Create an issue with missing required field")
     def test_create_issue_with_missing_required_field(self):
         Dashboard.start_create_issue(self)
-        CreateIssue.create_issue(self, project, issue, "")
+        CreateIssue.create_issue(self, project, issue, "", original_estimate, remaining_estimate)
         CreateIssue.submit_issue(self)
         assert CreateIssue.is_error_message_present(self)
         CreateIssue.cancel_creating_issue(self)
@@ -85,7 +87,7 @@ class TestCreateIssue:
     @allure.title("Create an issue with parameter length longer that supported")
     def test_create_issue_with_parameter_text_length_longer_than_supported(self):
         Dashboard.start_create_issue(self)
-        CreateIssue.create_issue(self, project, issue, long_summary)
+        CreateIssue.create_issue(self, project, issue, long_summary, original_estimate, remaining_estimate)
         CreateIssue.submit_issue(self)
         assert CreateIssue.is_error_message_present(self)
 
@@ -101,6 +103,7 @@ class TestSearchIssue:
         Dashboard.click_my_open_issues_menu_item(self)
         MyOpenIssues.get_summary_created_issue(self)
         assert MyOpenIssues.get_summary_created_issue(self) == CreateIssue.summary
+
     @pytest.mark.ui
     @allure.tag('ui')
     @allure.title("Search ""No results"" issue")
