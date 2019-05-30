@@ -6,3 +6,4 @@ pytest-html
 webdriver_manager
 selenium
 allure-pytest
+requests

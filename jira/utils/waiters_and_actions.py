@@ -69,7 +69,7 @@ class UIInteractions:
         p_nouns = ["These dudes", "Both of my moms", "All the kings of the world", "Some guys",
                    "All of a cattery's cats",
                    "The multitude of sloths living under your bed", "Your homies",
-                   "Like, these, like, all these people"'Nycticorax nycticoraxs', 'Boa caninuss',
+                   "Like, these, like, all these people", 'Nycticorax nycticoraxs', 'Boa caninuss',
                    'Melanerpes erythrocephaluss', 'Lycosa godeffroyis', 'Manouria emyss', 'Macropus agiliss',
                    'Macropus agiliss', 'Bettongia penicillatas', 'Pteronura brasiliensiss', 'Boa caninuss',
                    'Phascogale caluras', 'Sitta canadensiss', 'Antechinus flavipess', 'Crotaphytus collariss',
