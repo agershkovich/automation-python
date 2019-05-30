@@ -8,3 +8,5 @@ pytest -v jira/tests/jira_pages_test.py
 pytest --alluredir=./jira/tests-reports ./jira/tests
 allure serve ./jira/tests-reports
 
+[![CircleCI](https://circleci.com/gh/agershkovich/automation-python.svg?style=svg)](https://circleci.com/gh/agershkovich/automation-python)
+
