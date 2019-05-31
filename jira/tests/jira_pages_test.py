@@ -13,9 +13,11 @@ base_url_api = "https://jira.hillel.it"
 title = "System Dashboard - Hillel IT School JIRA"
 username = "AlexeyGershkovich"
 password = "AlexeyGershkovich"
+authorization = "Basic QWxleGV5R2Vyc2hrb3ZpY2g6QWxleGV5R2Vyc2hrb3ZpY2g="
 wrong_credentials = "Dummy"
-project = "Webinar (WEBINAR)"
+project = "WEBINAR"
 issue = "Bug"
+priority = "High"
 
 long_summary = "One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into " \
                "a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his " \
@@ -24,6 +26,16 @@ long_summary = "One morning, when Gregor Samsa woke from troubled dreams, he fou
 keywords = "Not result"
 original_estimate = "3w 4d 12h"
 remaining_estimate = "5w 1d 8h"
+
+create_issue_endpoint = base_url_api + "/rest/api/2/issue"
+search_issue_endpoint = base_url_api + "/rest/api/2/search"
+modify_issue_endpoint = base_url_api + "/rest/api/2/issue/{0}"
+
+headers = {
+    # "Accept": "application/json",
+    "Authorization": authorization,
+    "Content-Type": "application/json"
+}
 
 
 @pytest.mark.usefixtures("driver_init")
@@ -138,10 +150,44 @@ class TestsUsingApi:
     @pytest.mark.parametrize(
         "http_response, expected",
         [
-            (ApiInteractions.login(base_url_api, username, password), 200),  # Login OK
-            (ApiInteractions.login(base_url_api, username, wrong_credentials), 401),  # Wrong password, AUTHENTICATED FAILED
-            (ApiInteractions.login(base_url_api, wrong_credentials, password), 401)  # Wrong username, AUTHENTICATED FAILED
+            (ApiInteractions.login_by_api(base_url_api, username, password), 200),
+            # Login OK
+            (ApiInteractions.login_by_api(base_url_api, username, wrong_credentials), 401),
+            # Wrong password, AUTHENTICATED FAILED
+            (ApiInteractions.login_by_api(base_url_api, wrong_credentials, password), 401)
+            # Wrong username, AUTHENTICATED FAILED
         ]
     )
     def test_login_to_jira_by_api(self, http_response, expected):
+        assert http_response == expected
+
+    @pytest.mark.api
+    @allure.tag('api')
+    @allure.title("Create issue using api")
+    @pytest.mark.parametrize(
+
+        "http_response, expected",
+        [
+            (ApiInteractions.create_issue_by_api(create_issue_endpoint,
+                                                 ApiInteractions.get_payload(issue,
+                                                                             CreateIssue.created_by_api_summary,
+                                                                             assignee=username,
+                                                                             priority=priority),
+                                                 headers), 201),  # with all required fields
+            (ApiInteractions.create_issue_by_api(create_issue_endpoint,
+                                                 ApiInteractions.get_payload(issue,
+                                                                             CreateIssue.created_by_api_summary,
+                                                                             assignee=wrong_credentials,
+                                                                             priority=priority),
+                                                 headers), 400),  # with missing required fields
+            (ApiInteractions.create_issue_by_api(create_issue_endpoint,
+                                                 ApiInteractions.get_payload(issue,
+                                                                             long_summary,
+                                                                             assignee=wrong_credentials,
+                                                                             priority=priority),
+                                                 headers), 400)  # with parameter text length, longer than supported
+
+        ]
+    )
+    def test_create_issue_in_jira_by_api(self, http_response, expected):
         assert http_response == expected
