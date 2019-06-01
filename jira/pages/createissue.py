@@ -29,7 +29,7 @@ class CreateIssue(BasePage):
 
     random_summary = UIInteractions.sing_sen_maker()
     summary = random_summary
-    created_by_api_summary = "Created by API - " + random_summary
+    created_by_api_summary = "Created_by_API - " + random_summary
 
     def is_create_issue_page_present(self):
         try:

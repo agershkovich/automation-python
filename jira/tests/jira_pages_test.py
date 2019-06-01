@@ -32,7 +32,6 @@ search_issue_endpoint = base_url_api + "/rest/api/2/search"
 modify_issue_endpoint = base_url_api + "/rest/api/2/issue/{0}"
 
 headers = {
-    # "Accept": "application/json",
     "Authorization": authorization,
     "Content-Type": "application/json"
 }
@@ -150,11 +149,11 @@ class TestsUsingApi:
     @pytest.mark.parametrize(
         "http_response, expected",
         [
-            (ApiInteractions.login_by_api(base_url_api, username, password), 200),
+            (ApiInteractions.login_by_api(base_url_api, username, password).status_code, 200),
             # Login OK
-            (ApiInteractions.login_by_api(base_url_api, username, wrong_credentials), 401),
+            (ApiInteractions.login_by_api(base_url_api, username, wrong_credentials).status_code, 401),
             # Wrong password, AUTHENTICATED FAILED
-            (ApiInteractions.login_by_api(base_url_api, wrong_credentials, password), 401)
+            (ApiInteractions.login_by_api(base_url_api, wrong_credentials, password).status_code, 401)
             # Wrong username, AUTHENTICATED FAILED
         ]
     )
@@ -168,26 +167,51 @@ class TestsUsingApi:
 
         "http_response, expected",
         [
-            (ApiInteractions.create_issue_by_api(create_issue_endpoint,
-                                                 ApiInteractions.get_payload(issue,
-                                                                             CreateIssue.created_by_api_summary,
-                                                                             assignee=username,
-                                                                             priority=priority),
-                                                 headers), 201),  # with all required fields
-            (ApiInteractions.create_issue_by_api(create_issue_endpoint,
-                                                 ApiInteractions.get_payload(issue,
-                                                                             CreateIssue.created_by_api_summary,
-                                                                             assignee=wrong_credentials,
-                                                                             priority=priority),
-                                                 headers), 400),  # with missing required fields
-            (ApiInteractions.create_issue_by_api(create_issue_endpoint,
-                                                 ApiInteractions.get_payload(issue,
-                                                                             long_summary,
-                                                                             assignee=wrong_credentials,
-                                                                             priority=priority),
-                                                 headers), 400)  # with parameter text length, longer than supported
+            (ApiInteractions.run_http_request("POST", create_issue_endpoint,
+                                              ApiInteractions.get_payload(issue,
+                                                                          CreateIssue.created_by_api_summary,
+                                                                          assignee=username,
+                                                                          priority=priority),
+                                              headers).status_code, 201),  # with all required fields
+            (ApiInteractions.run_http_request("POST", create_issue_endpoint,
+                                              ApiInteractions.get_payload(issue,
+                                                                          CreateIssue.created_by_api_summary,
+                                                                          assignee=wrong_credentials,
+                                                                          priority=priority),
+                                              headers).status_code, 400),  # with missing required fields
+            (ApiInteractions.run_http_request("POST", create_issue_endpoint,
+                                              ApiInteractions.get_payload(issue,
+                                                                          long_summary,
+                                                                          assignee=wrong_credentials,
+                                                                          priority=priority),
+                                              headers).status_code, 400)
+            # with parameter text length, longer than supported
 
         ]
     )
     def test_create_issue_in_jira_by_api(self, http_response, expected):
+        assert http_response == expected
+
+    @pytest.mark.api
+    @allure.tag('api')
+    @allure.title("Search issue using api")
+    @pytest.mark.parametrize(
+
+        "http_response, expected",
+        [
+            (ApiInteractions.run_http_request("POST", search_issue_endpoint,
+                                              ApiInteractions.get_search_payload(max_results=1,
+                                                                                 summary="Created_by_API"),
+                                              headers).status_code, 200),  # One result
+            (ApiInteractions.run_http_request("POST", search_issue_endpoint,
+                                              ApiInteractions.get_search_payload(max_results=5,
+                                                                                 summary="Created"),
+                                              headers).status_code, 200),  # Five results
+            (ApiInteractions.run_http_request("POST", search_issue_endpoint,
+                                              ApiInteractions.get_search_payload(max_results=1,
+                                                                                 summary=""),
+                                              headers).status_code, 400),  # Non-existed issue
+        ]
+    )
+    def test_search_issue_in_jira_by_api(self, http_response, expected):
         assert http_response == expected
