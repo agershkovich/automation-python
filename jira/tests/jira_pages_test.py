@@ -1,7 +1,7 @@
 import allure
 import pytest
 
-from jira.api.jira_api_actions import ApiInteractions
+from jira.api.jira_api_actions import ApiInteractions as API
 from jira.pages.createissue import CreateIssue
 from jira.pages.dashboardpage import Dashboard
 from jira.pages.loginpage import LoginPage
@@ -149,12 +149,15 @@ class TestsUsingApi:
     @pytest.mark.parametrize(
         "http_response, expected",
         [
-            (ApiInteractions.login_by_api(base_url_api, username, password).status_code, 200),
             # Login OK
-            (ApiInteractions.login_by_api(base_url_api, username, wrong_credentials).status_code, 401),
+            (API.login_by_api(base_url_api, username, password).status_code, 200),
+
             # Wrong password, AUTHENTICATED FAILED
-            (ApiInteractions.login_by_api(base_url_api, wrong_credentials, password).status_code, 401)
+            (API.login_by_api(base_url_api, username, wrong_credentials).status_code, 401),
+
             # Wrong username, AUTHENTICATED FAILED
+            (API.login_by_api(base_url_api, wrong_credentials, password).status_code, 401)
+
         ]
     )
     def test_login_to_jira_by_api(self, http_response, expected):
@@ -167,30 +170,25 @@ class TestsUsingApi:
 
         "http_response, expected",
         [
-            (ApiInteractions.run_http_request("POST", create_issue_endpoint,
-                                              ApiInteractions.get_payload(issue,
-                                                                          CreateIssue.created_by_api_summary,
-                                                                          assignee=username,
-                                                                          priority=priority),
-                                              headers).status_code, 201),  # with all required fields
-            (ApiInteractions.run_http_request("POST", create_issue_endpoint,
-                                              ApiInteractions.get_payload(issue,
-                                                                          CreateIssue.created_by_api_summary,
-                                                                          assignee=wrong_credentials,
-                                                                          priority=priority),
-                                              headers).status_code, 400),  # with missing required fields
-            (ApiInteractions.run_http_request("POST", create_issue_endpoint,
-                                              ApiInteractions.get_payload(issue,
-                                                                          long_summary,
-                                                                          assignee=wrong_credentials,
-                                                                          priority=priority),
-                                              headers).status_code, 400)
+            # with all required fields
+            (API.create_issue_by_api(issue, create_issue_endpoint, CreateIssue.created_by_api_summary,
+                                     assignee=username,
+                                     priority=priority, headers=headers), 201),
+
+            # with missing required fields
+            (API.create_issue_by_api(issue, create_issue_endpoint, CreateIssue.created_by_api_summary,
+                                     assignee=username,
+                                     priority="", headers=headers), 400),
+
             # with parameter text length, longer than supported
+            (API.create_issue_by_api(issue, create_issue_endpoint, long_summary,
+                                     assignee=username,
+                                     priority=priority, headers=headers), 400)
 
         ]
     )
     def test_create_issue_in_jira_by_api(self, http_response, expected):
-        assert http_response == expected
+        assert http_response.status_code == expected
 
     @pytest.mark.api
     @allure.tag('api')
@@ -199,19 +197,55 @@ class TestsUsingApi:
 
         "http_response, expected",
         [
-            (ApiInteractions.run_http_request("POST", search_issue_endpoint,
-                                              ApiInteractions.get_search_payload(max_results=1,
-                                                                                 summary="Created_by_API"),
-                                              headers).status_code, 200),  # One result
-            (ApiInteractions.run_http_request("POST", search_issue_endpoint,
-                                              ApiInteractions.get_search_payload(max_results=5,
-                                                                                 summary="Created"),
-                                              headers).status_code, 200),  # Five results
-            (ApiInteractions.run_http_request("POST", search_issue_endpoint,
-                                              ApiInteractions.get_search_payload(max_results=1,
-                                                                                 summary=""),
-                                              headers).status_code, 400),  # Non-existed issue
+            # One result
+            (API.search_issue_by_api(search_issue_endpoint, summary="Created_by_API", max_results=1, headers=headers),
+             200),
+
+            # Five results
+            (API.search_issue_by_api(search_issue_endpoint, summary="Created", max_results=5, headers=headers), 200),
+
+            # Non-existed issue
+            (API.search_issue_by_api(search_issue_endpoint, summary="", max_results=1, headers=headers), 400)
         ]
     )
     def test_search_issue_in_jira_by_api(self, http_response, expected):
-        assert http_response == expected
+        assert http_response.status_code == expected
+
+    @pytest.mark.api
+    @allure.tag('api')
+    @allure.title("Update issue using api")
+    @pytest.mark.parametrize(
+        # create_and_update_issue_by_api(issue, create_endpoint, summary, assignee, priority,
+        #                                        new_summary, new_assignee, new_priority, headers):
+        "http_response, expected",
+        [
+            # Updated summary
+            (
+                    API.create_and_update_issue_by_api(issue, create_issue_endpoint,
+                                                       summary=CreateIssue.created_by_api_summary,
+                                                       assignee=username, priority=priority, new_summary="Updated",
+                                                       new_assignee=username, new_priority=priority, headers=headers),
+                    204),
+
+            #  + Updated assignee
+            (
+                    API.create_and_update_issue_by_api(issue, create_issue_endpoint,
+                                                       summary=CreateIssue.created_by_api_summary,
+                                                       assignee=username, priority=priority,
+                                                       new_summary="Updated",
+                                                       new_assignee="webinar5", new_priority=priority,
+                                                       headers=headers),
+                    204),
+
+            #  + Updated priority
+            (
+                    API.create_and_update_issue_by_api(issue, create_issue_endpoint,
+                                                       summary=CreateIssue.created_by_api_summary,
+                                                       assignee=username, priority=priority, new_summary="Updated",
+                                                       new_assignee="webinar5", new_priority="Low", headers=headers),
+                    204)
+
+        ]
+    )
+    def test_update_issue_in_jira_by_api(self, http_response, expected):
+        assert http_response.status_code == expected
