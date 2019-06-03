@@ -6,3 +6,6 @@ pytest-html
 webdriver_manager
 selenium
 allure-pytest
+requests
+pytest-xdist==1.23.0
+pytest-rerunfailures==4.1
