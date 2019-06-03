@@ -29,7 +29,6 @@ remaining_estimate = "5w 1d 8h"
 
 create_issue_endpoint = base_url_api + "/rest/api/2/issue"
 search_issue_endpoint = base_url_api + "/rest/api/2/search"
-modify_issue_endpoint = base_url_api + "/rest/api/2/issue/{0}"
 
 headers = {
     "Authorization": authorization,
@@ -215,8 +214,7 @@ class TestsUsingApi:
     @allure.tag('api')
     @allure.title("Update issue using api")
     @pytest.mark.parametrize(
-        # create_and_update_issue_by_api(issue, create_endpoint, summary, assignee, priority,
-        #                                        new_summary, new_assignee, new_priority, headers):
+
         "http_response, expected",
         [
             # Updated summary
@@ -249,3 +247,10 @@ class TestsUsingApi:
     )
     def test_update_issue_in_jira_by_api(self, http_response, expected):
         assert http_response.status_code == expected
+
+    @pytest.mark.api
+    @allure.tag('api')
+    @allure.title("Random fail")
+    def test_random_fail(self):
+        import random
+        assert random.choice([1, 2, 3]) == 2

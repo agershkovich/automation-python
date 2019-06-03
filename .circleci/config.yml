@@ -40,7 +40,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest --alluredir=./jira/tests-reports ./jira/tests
+            pytest -n 3 --dist=loadscope -v --reruns 10 --alluredir=./jira/tests-reports ./jira/tests
       - run:
           name: Reporting
           command:  |
